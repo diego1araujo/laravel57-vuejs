@@ -7,6 +7,11 @@
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-build-classic/-/ckeditor5-build-classic-1.0.0-beta.4.tgz#c9b9b07d18cb9d99558ae89fd57b51ee6e6940b8"
   integrity sha1-ybmwfRjLnZlViuif1XtR7m5pQLg=
 
+"@fortawesome/fontawesome-free@^5.4.1":
+  version "5.4.2"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.4.2.tgz#b2d782da69c45ea61954291e2615a8f7741c96b2"
+  integrity sha512-lpruVv/4AkKUujyzHCNJ8yOceBf7Na/pFaX52ZI/BFMCYkUEwiQ1P0viZg//+WelrNNEgvMOvCMDEDaOMZ/u1w==
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -4183,7 +4188,7 @@ mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0, mkd
   dependencies:
     minimist "0.0.8"
 
-moment@^2.10.2:
+moment@^2.10.2, moment@^2.22.2:
   version "2.22.2"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
   integrity sha1-PCV/mDn8DpP/UxSWMiOeuQeD/2Y=
@@ -6234,6 +6239,11 @@ svgo@^0.7.0:
     sax "~1.2.1"
     whet.extend "~0.9.9"
 
+sweetalert2@^7.28.10:
+  version "7.28.10"
+  resolved "https://registry.yarnpkg.com/sweetalert2/-/sweetalert2-7.28.10.tgz#72f4369a7502f1f8b3be88cfda9372ed1f061a96"
+  integrity sha512-+h5pnfe3uPThvhhtKjuAWVoEV6PbiRgjO4RfqoVqi9CXuLY5QIRLBEanD80ONG5o9WMdXA0/Eu6R2I5LK1cOAw==
+
 tapable@^0.2.7:
   version "0.2.8"
   resolved "https://registry.yarnpkg.com/tapable/-/tapable-0.2.8.tgz#99372a5c999bf2df160afc0d74bed4f47948cd22"
@@ -6586,6 +6596,11 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
+vform@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/vform/-/vform-1.0.0.tgz#8bca811f6380d64089972f3f4a1d9adb35bc0273"
+  integrity sha512-9X17bCzeWW6quND76TxouUgV221gFXqBllLTQjvj8MZgqAmi3bsY578f7EeYI9nvuv2LdyLTW4YcuPlIqqLdDw==
+
 vm-browserify@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-0.0.4.tgz#5d7ea45bbef9e4a6ff65f95438e0a87c357d5a73"
@@ -6616,6 +6631,16 @@ vue-loader@^13.7.1:
     vue-hot-reload-api "^2.2.0"
     vue-style-loader "^3.0.0"
     vue-template-es2015-compiler "^1.6.0"
+
+vue-progressbar@^0.7.5:
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/vue-progressbar/-/vue-progressbar-0.7.5.tgz#414730892252b1e45582d4979dec93038e007f79"
+  integrity sha512-VeNG/inMsFbvdCTS7lJ1gjDAKSUZdqkhW9gS1tb0we1rqFKxR+BCEiVUgw5C84vODKb14M2GWHTw0WVdpoVg6g==
+
+vue-router@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.0.1.tgz#d9b05ad9c7420ba0f626d6500d693e60092cc1e9"
+  integrity sha512-vLLoY452L+JBpALMP5UHum9+7nzR9PeIBCghU9ZtJ1eWm6ieUI8Zb/DI3MYxH32bxkjzYV1LRjNv4qr8d+uX/w==
 
 vue-style-loader@^3.0.0:
   version "3.1.2"
