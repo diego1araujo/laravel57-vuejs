@@ -1,11 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::apiResources([
     'user' => '\App\Http\Controllers\Api\UserController',
 ]);
+
+Route::get('profile', '\App\Http\Controllers\Api\UserController@profile');
+Route::put('profile', '\App\Http\Controllers\Api\UserController@updateProfile');
