@@ -138,11 +138,14 @@
             async loadProfile() {
                 this.$Progress.start();
 
-                await axios.get('/api/profile')
-                    .then(({ data }) => {
-                        this.form.fill(data);
-                        this.$Progress.finish();
-                    });
+                try {
+                    const reponse = await axios.get('/api/profile');
+
+                    this.form.fill(data);
+                    this.$Progress.finish();
+                } catch (error) {
+                    //
+                }
             },
             getProfilePhoto() {
                 let photo = (this.form.photo.length > 0) ? '/img/profile/' + this.form.photo : '/img/profile.png';
@@ -156,13 +159,14 @@
                     this.form.password = undefined;
                 }
 
-                await this.form.put('/api/profile')
-                    .then(() => {
-                        Fire.$emit('AfterCreate');
-                        this.$Progress.finish();
-                    }).catch(() => {
-                        this.$Progress.fail();
-                    });
+                try {
+                    const response = await this.form.put('/api/profile');
+
+                    Fire.$emit('AfterCreate');
+                    this.$Progress.finish();
+                } catch (error) {
+                    this.$Progress.fail();
+                }
             },
             updateProfile(e) {
                 let file = e.target.files[0];

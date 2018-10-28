@@ -44,7 +44,7 @@
                         </table>
                     </div><!-- /.card-body -->
                     <div class="card-footer">
-                        <pagination :data="users" @pagination-change-page="loadUsers"></pagination>
+                        <pagination :data="users" :limit="10" @pagination-change-page="loadUsers"></pagination>
                     </div>
                 </div>
             </div>
@@ -160,26 +160,12 @@ export default {
             if (this.$gate.isAdminOrAuthor()) {
                 this.$Progress.start();
 
-                await axios.get('/api/user?page=' + page).then(response => {
+                try {
+                    const response = await axios.get('/api/user?page=' + page);
+
                     this.users = response.data;
                     this.$Progress.finish();
-                });
-            }
-        },
-        async createUser() {
-            this.$Progress.start();
-
-            await this.form.post('/api/user')
-                .then(() => {
-                    Fire.$emit('AfterCreate');
-
-                    $('#addNew').modal('hide');
-
-                    toast({
-                        type: 'success',
-                        title: 'User created successfully',
-                    });
-                }).catch(() => {
+                } catch (error) {
                     this.$Progress.fail();
 
                     swal(
@@ -187,15 +173,62 @@ export default {
                         'Something went wrong',
                         'warning',
                     );
-                });
+                }
+            }
+        },
+        async searchUsers() {
+            if (this.$gate.isAdminOrAuthor()) {
+                let query = this.$parent.search;
+                this.$Progress.start();
 
-            this.$Progress.finish();
+                try {
+                    const response = await axios.get('/api/findUser?q=' + query);
+
+                    this.users = response.data;
+                    this.$Progress.finish();
+                } catch (error) {
+                    this.$Progress.fail();
+
+                    swal(
+                        'Failed!',
+                        'Something went wrong',
+                        'warning',
+                    );
+                }
+            }
+        },
+        async createUser() {
+            this.$Progress.start();
+
+            try {
+                const response = await this.form.post('/api/user');
+
+                Fire.$emit('AfterCreate');
+
+                $('#addNew').modal('hide');
+
+                this.$Progress.finish();
+
+                toast({
+                    type: 'success',
+                    title: 'User created successfully',
+                });
+            } catch (error) {
+                this.$Progress.fail();
+
+                swal(
+                    'Failed!',
+                    'Something went wrong',
+                    'warning',
+                );
+            }
         },
         async updateUser(id) {
             this.$Progress.start();
 
-            await this.form.put('/api/user/' + this.form.id)
-            .then(response => {
+            try {
+                const response = await this.form.put('/api/user/' + this.form.id);
+
                 $('#addNew').modal('hide');
 
                 swal(
@@ -207,7 +240,7 @@ export default {
                 this.$Progress.finish();
 
                 Fire.$emit('AfterCreate');
-            }).catch(() => {
+            } catch (error) {
                 this.$Progress.fail();
 
                 swal(
@@ -215,7 +248,7 @@ export default {
                     'Something went wrong',
                     'warning',
                 );
-            });
+            }
         },
         deleteUser(id) {
             swal({
@@ -230,32 +263,37 @@ export default {
                 if (result.value) {
                     this.$Progress.start();
 
-                    await this.form.delete('/api/user/' + id)
-                        .then(response => {
-                            this.$Progress.finish();
+                    try {
+                        const response = await this.form.delete('/api/user/' + id);
 
-                            swal(
-                                'Deleted!',
-                                'Your file has been deleted.',
-                                'success',
-                            );
+                        this.$Progress.finish();
 
-                            Fire.$emit('AfterCreate');
-                        }).catch(() => {
-                            this.$Progress.fail();
+                        swal(
+                            'Deleted!',
+                            'Your file has been deleted.',
+                            'success',
+                        );
 
-                            swal(
-                                'Failed!',
-                                'Something went wrong',
-                                'warning',
-                            );
-                        });
+                        Fire.$emit('AfterCreate');
+                    } catch (error) {
+                        this.$Progress.fail();
+
+                        swal(
+                            'Failed!',
+                            'Something went wrong',
+                            'warning',
+                        );
+                    }
                 }
             });
         },
     },
     created() {
         this.loadUsers();
+
+        Fire.$on('searching', () => {
+            this.searchUsers();
+        });
 
         Fire.$on('AfterCreate', () => {
             this.loadUsers();
