@@ -3,12 +3,12 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card card-widget widget-user">
-                    <div class="widget-user-header text-white" style="background: url('./img/user-cover.png');">
-                        <h3 class="widget-user-username">Elizabeth Pierce</h3>
-                        <h5 class="widget-user-desc">Web Designer</h5>
+                    <div class="widget-user-header text-white" style="background: url('./img/user-cover.jpg');">
+                        <h3 class="widget-user-username">{{ this.form.name }}</h3>
+                        <h5 class="widget-user-desc">{{ this.form.type }}</h5>
                     </div>
                     <div class="widget-user-image">
-                        <img class="img-circle" src="/img/profile.png" alt="User Avatar">
+                        <img class="img-circle" :src="getProfilePhoto()" alt="User Avatar">
                     </div>
                     <div class="card-footer">
                         <div class="row">
@@ -75,11 +75,11 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="inputExperience" class="col-sm-2 control-label">Experience</label>
+                                        <label for="inputBio" class="col-sm-2 control-label">Bio</label>
 
                                         <div class="col-sm-12">
-                                            <textarea v-model="form.bio" class="form-control" id="inputExperience"
-                                                placeholder="Experience" :class="{ 'is-invalid': form.errors.has('bio') }"></textarea>
+                                            <textarea v-model="form.bio" class="form-control" id="inputBio"
+                                                placeholder="Bio" :class="{ 'is-invalid': form.errors.has('bio') }"></textarea>
                                             <has-error :form="form" field="bio"></has-error>
                                         </div>
                                     </div>
@@ -93,12 +93,12 @@
 
                                     <div class="form-group">
                                         <label for="password" class="col-sm-12 control-label">
-                                            Passport (leave empty if not changing)
+                                            Password
                                         </label>
 
                                         <div class="col-sm-12">
                                             <input type="password" v-model="form.password" class="form-control" id="password"
-                                                placeholder="Passport" :class="{ 'is-invalid': form.errors.has('password') }">
+                                                placeholder="Password" :class="{ 'is-invalid': form.errors.has('password') }">
                                             <has-error :form="form" field="password"></has-error>
                                         </div>
                                     </div>
@@ -144,33 +144,46 @@
                         this.$Progress.finish();
                     });
             },
+            getProfilePhoto() {
+                let photo = (this.form.photo.length > 0) ? '/img/profile/' + this.form.photo : '/img/profile.png';
+
+                return photo;
+            },
             async updateInfo() {
-                $this.$Progress.start();
+                this.$Progress.start();
+
+                if (this.form.password == '') {
+                    this.form.password = undefined;
+                }
 
                 await this.form.put('/api/profile')
                     .then(() => {
-                        $this.$Progress.finish();
+                        Fire.$emit('AfterCreate');
+                        this.$Progress.finish();
                     }).catch(() => {
-                        $this.$Progress.fail();
+                        this.$Progress.fail();
                     });
             },
             updateProfile(e) {
                 let file = e.target.files[0];
                 let reader = new FileReader();
+                let limit = 1024 * 1024 * 2;
 
-                if (file['size'] < 2111775) {
-                    reader.onloadend = function(file) {
-                        this.form.photo = reader.result;
-                    }
-
-                    reader.readAsDataURL(file);
-                } else {
+                if (file['size'] > limit) {
                     swal({
                         type: 'error',
                         title: 'Oops...',
                         text: 'You are uploading a large file',
                     });
+
+                    return false;
                 }
+
+                reader.onload = (file) => {
+                    this.form.photo = reader.result;
+                }
+
+                reader.readAsDataURL(file);
             },
         },
         created() {

@@ -39,6 +39,12 @@
             </footer>
         </div><!-- ./wrapper -->
 
+        @auth
+            <script>
+                window.user = @json(auth()->user());
+            </script>
+        @endauth
+
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
     </body>

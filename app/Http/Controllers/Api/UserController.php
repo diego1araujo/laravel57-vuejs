@@ -16,9 +16,11 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::latest()->paginate(10);
+        if (\Gate::allows('isAdmin') || \Gate::allows('isAuthor')) {
+            $users = User::latest()->paginate(15);
 
-        return response()->json($users);
+            return response()->json($users);
+        }
     }
 
     public function store(Request $request)
@@ -86,11 +88,6 @@ class UserController extends Controller
         return auth('api')->user();
     }
 
-    public function show($id)
-    {
-        //
-    }
-
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -110,6 +107,8 @@ class UserController extends Controller
 
     public function destroy($id)
     {
+        $this->authorize('isAdmin');
+
         $user = User::findOrFail($id);
         $user->delete();
 

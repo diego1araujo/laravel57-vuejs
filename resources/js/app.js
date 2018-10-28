@@ -7,10 +7,13 @@ import { Form, HasError, AlertError } from 'vform';
 import moment from 'moment';
 import VueProgressBar from 'vue-progressbar';
 import swal from 'sweetalert2';
+import Gate from './Gate';
 
 window.Form = Form;
 Vue.component(HasError.name, HasError);
 Vue.component(AlertError.name, AlertError);
+
+Vue.component('pagination', require('laravel-vue-pagination'));
 
 Vue.use(VueRouter);
 
@@ -31,11 +34,14 @@ const toast = swal.mixin({
 
 window.toast = toast;
 
+Vue.prototype.$gate = new Gate(window.user);
+
 let routes = [
     { path: '/dashboard', component: require('./components/Dashboard.vue') },
     { path: '/developer', component: require('./components/Developer.vue') },
     { path: '/users', component: require('./components/Users.vue') },
     { path: '/profile', component: require('./components/Profile.vue') },
+    { path: '*', component: require('./components/NotFound.vue') },
 ];
 
 const router = new VueRouter({
@@ -66,6 +72,11 @@ Vue.component(
 Vue.component(
     'passport-personal-access-tokens',
     require('./components/passport/PersonalAccessTokens.vue')
+);
+
+Vue.component(
+    'not-found',
+    require('./components/NotFound.vue')
 );
 
 const app = new Vue({

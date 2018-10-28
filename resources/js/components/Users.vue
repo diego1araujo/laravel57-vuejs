@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="row mt-5">
+        <div class="row mt-5" v-if="$gate.isAdminOrAuthor()">
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header">
@@ -24,7 +24,7 @@
                                     <th>Created At</th>
                                     <th>Modify</th>
                                 </tr>
-                                <tr v-for="user in users" :key="user.id">
+                                <tr v-for="user in users.data" :key="user.id">
                                     <td>{{ user.id }}</td>
                                     <td>{{ user.name }}</td>
                                     <td>{{ user.email }}</td>
@@ -43,8 +43,15 @@
                             </tbody>
                         </table>
                     </div><!-- /.card-body -->
+                    <div class="card-footer">
+                        <pagination :data="users" @pagination-change-page="loadUsers"></pagination>
+                    </div>
                 </div>
             </div>
+        </div>
+
+        <div v-if="!$gate.isAdminOrAuthor()">
+            <not-found></not-found>
         </div>
 
         <!-- Modal -->
@@ -149,13 +156,15 @@ export default {
             $('#addNew').modal('show');
             this.form.fill(user);
         },
-        async loadUsers() {
-            this.$Progress.start();
+        async loadUsers(page = 1) {
+            if (this.$gate.isAdminOrAuthor()) {
+                this.$Progress.start();
 
-            await axios.get('/api/user').then(response => {
-                this.users = response.data.data
-                this.$Progress.finish();
-            });
+                await axios.get('/api/user?page=' + page).then(response => {
+                    this.users = response.data;
+                    this.$Progress.finish();
+                });
+            }
         },
         async createUser() {
             this.$Progress.start();
