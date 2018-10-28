@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Laravel\Passport\Passport;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -22,9 +23,9 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(GateContract $gate)
     {
-        $this->registerPolicies();
+        $this->registerPolicies($gate);
 
         $policies = [
             'isAdmin' => 'admin',
@@ -34,12 +35,12 @@ class AuthServiceProvider extends ServiceProvider
         ];
 
         foreach ($policies as $define => $type) {
-            Gate::define($define, function($user) use ($type) {
+            $gate->define($define, function($user) use ($type) {
                 return $user->type === $type;
             });
         }
 
-        Gate::define('isMyAccount', function($user, $profileUser) {
+        $gate->define('isMyAccount', function($user, $profileUser) {
             return $user->id == $profileUser->id;
         });
 
