@@ -17,7 +17,8 @@
         "laravel-mix": "^5.0.5",
         "lodash": "^4.17.19",
         "popper.js": "^1.12",
-        "vue": "^2.5.7"
+        "vue": "^2.5.7",
+        "node-forge": ">=0.10.0"
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.4.1",
